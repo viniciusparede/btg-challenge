@@ -6,6 +6,15 @@ import pandas as pd
 
 
 def read_dat_file_to_dataframe(file_path: str) -> pd.DataFrame:
+    """
+    Lê um arquivo de dados do tipo .dat e cria um DataFrame com as colunas "lat", "long", "data_value" e "file_path".
+
+    Args:
+        file_path (str): Caminho do arquivo a ser lido.
+
+    Returns:
+        pd.DataFrame: DataFrame contendo os dados do arquivo.
+    """
     if not file_path[-4:] == ".bln":
         with open(file_path, "r") as f:
             raw_file = f.readlines()
@@ -18,6 +27,15 @@ def read_dat_file_to_dataframe(file_path: str) -> pd.DataFrame:
 
 
 def multithreading_reader_data_file(folder_path: str) -> pd.DataFrame:
+    """
+    Lê vários arquivos de dados do tipo .dat em paralelo utilizando threads e cria um DataFrame combinado.
+
+    Args:
+        folder_path (str): Caminho da pasta contendo os arquivos de dados.
+
+    Returns:
+        pd.DataFrame: DataFrame combinado contendo os dados de todos os arquivos.
+    """
     file_paths = [
         os.path.join(folder_path, filename) for filename in os.listdir(folder_path)
     ]
