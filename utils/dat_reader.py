@@ -15,7 +15,7 @@ def read_dat_file_to_dataframe(file_path: str) -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame contendo os dados do arquivo.
     """
-    if not file_path[-4:] == ".bln":
+    if file_path[-4:] == ".dat":
         with open(file_path, "r") as f:
             raw_file = f.readlines()
 

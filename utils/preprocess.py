@@ -6,6 +6,7 @@ import numpy as np
 import geopandas as gpd
 from shapely.geometry import Point
 
+from datetime import datetime
 
 from typing import List, Optional
 
@@ -47,6 +48,20 @@ def _create_geometry_column(df: pd.DataFrame) -> List[Point]:
         )
 
     return [Point(xy) for xy in zip(df["lat"], df["long"])]
+
+
+def _format_date(string):
+    # Função para extrair e formatar a data
+
+    # Extrai a parte da string com a data (061221)
+    date_part = string[-10:-4]
+
+    # Converte a string em objeto de data
+    date_object = datetime.strptime(date_part, "%d%m%y")
+
+    # Formata a data como '06/12/21'
+    formatted_date = date_object.strftime("%d/%m/%y")
+    return formatted_date
 
 
 def preprocess_routine(
@@ -112,8 +127,11 @@ def preprocess_routine(
         inplace=True,
     )
 
+    # Aplica a função para criar uma nova coluna 'formatted_date'
+    result["data_previsao"] = result["file_path"].apply(_format_date)
+
     # retirar colunas não utilizadas
-    result.drop(columns="index_right", inplace=True)
+    result.drop(columns=["index_right", "file_path"], inplace=True)
 
     # Converter o GeoDataFrame para um DataFrame do pandas
     # Remover a coluna de geometria
