@@ -46,5 +46,5 @@ def multithreading_reader_data_file(folder_path: str) -> pd.DataFrame:
     with ThreadPoolExecutor(max_workers=num_workers) as executor:
         dfs = executor.map(read_dat_file_to_dataframe, file_paths)
 
-    combined_df = pd.concat(dfs, ignore_index=True)
+    combined_df = pd.concat(list(dfs), ignore_index=True)
     return combined_df
