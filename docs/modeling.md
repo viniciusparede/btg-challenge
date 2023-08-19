@@ -17,6 +17,7 @@ grid_precipitacao = griddata(
 ```
 
 ## Resultado
+![Previsão de precipitação Área](/images/interpolação.png)
 
 
 
