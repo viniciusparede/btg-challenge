@@ -12,6 +12,18 @@ FILE_DIR: str = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR: str = os.path.dirname(FILE_DIR)
 DATA_DIR: str = os.path.join(BASE_DIR, "data")
 
+# Dados obetidos através do estudo de contorno, conforme a image 'contorno.png'
+POLYGONAL_ORDER = [
+    (-44.6, -22.2),
+    (-44.6, -21.8),
+    (-44.6, -21.4),
+    (-44.2, -21.4),
+    (-43.8, -21.4),
+    (-43.8, -21.8),
+    (-44.2, -21.8),
+    (-44.2, -22.2),
+]
+
 
 def _create_geometry_column(df: pd.DataFrame) -> List[Point]:
     """
@@ -128,3 +140,45 @@ def apply_contour(
     pandas_df = df_without_geometry.copy()
 
     return pandas_df
+
+
+def transform_data(data: pd.DataFrame) -> pd.DataFrame:
+    """Realiza transformações específicas nos dados"""
+
+    # Cópia do dataframe para variável 'df'
+    df = data.copy()
+
+    # Seleção apenas das colunas que interessam
+    df = df.loc[
+        :, ["lat_aproximacao", "long_aproximacao", "data_value", "data_previsao"]
+    ].copy()
+
+    # Retirada de linhas duplicadas em um determinado ponto com os
+    # mesmos valores de precipitação
+    df.drop_duplicates(
+        subset=["lat_aproximacao", "long_aproximacao", "data_value"], inplace=True
+    )
+
+    # Ordena o dataframe com base nas localizações e a data de previsão
+    df.sort_values(
+        by=["lat_aproximacao", "long_aproximacao", "data_previsao"], inplace=True
+    )
+
+    # Resetar os índices
+    df.reset_index(drop=True, inplace=True)
+
+    # Criar uma coluna que represente a ordem específica do polígono
+    df["ordem"] = df.apply(
+        lambda row: POLYGONAL_ORDER.index(
+            (row["lat_aproximacao"], row["long_aproximacao"])
+        ),
+        axis=1,
+    )
+
+    # Ordenar o DataFrame pela coluna 'ordem' e, em seguida, remover a coluna 'ordem'
+    df_ordenado = df.sort_values(by="ordem").drop("ordem", axis=1)
+
+    # df assume a ordenação
+    df = df_ordenado.copy()
+
+    return df

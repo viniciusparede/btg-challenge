@@ -24,6 +24,7 @@ POLYGONAL_ORDER = [
     (-43.8, -21.8),
     (-44.2, -21.8),
     (-44.2, -22.2),
+    (-44.6, -22.2),
 ]
 
 
@@ -110,39 +111,42 @@ def apply_contour_figure(data: pd.DataFrame) -> Figure:
     return fig
 
 
-def predict_figure(
-    fig: Figure,
-    ax: np.ndarray,
-    grid_x: np.ndarray,
-    grid_y: np.ndarray,
-    precipation_grid: np.ndarray,
-    date: str,
-) -> None:
-    """Cria figura de predições para todos os dias"""
+def interpolation_figure(data: pd.DataFrame) -> Figure:
+    from model import PrecipitationModel
 
-    # Limites de precipitação
-    cbar_min = 0
-    cbar_max = 70
+    model = PrecipitationModel(data.copy())
 
-    # Plot dos resultados de predição
-    contour = ax.contourf(grid_x, grid_y, precipation_grid, levels=20, cmap="Blues")
+    z = 0
+    dates = data["data_previsao"].sort_values().unique()
 
-    # Adicionar uma colorbar
-    cbar = fig.colorbar(contour, ax=ax, label="Precipitação [mm]")
-    cbar.set_clim(cbar_min, cbar_max)
+    # Criar uma figura com 5 colunas e 1 linha
+    fig, axs = plt.subplots(nrows=2, ncols=5, figsize=(18, 5))
 
-    # Plotagem do polígono
-    ax.plot(
-        [p[0] for p in POLYGONAL_ORDER],
-        [p[1] for p in POLYGONAL_ORDER],
-        color="red",
-    )
+    for i in range(2):
+        for j in range(5):
+            model.predict(date=dates[z])
+            # Plot dos resultados
+            axs[i][j].contourf(
+                model.grid_x,
+                model.grid_y,
+                model.precipitation_grid,
+                levels=20,
+                cmap="Blues",
+            )
 
-    # Ajustar os limites dos eixos
-    ax.set_ylim(-22.4, -21.2)
+            axs[i][j].plot(
+                [p[0] for p in POLYGONAL_ORDER],
+                [p[1] for p in POLYGONAL_ORDER],
+                color="red",
+            )
 
-    # Data de cada subplot
-    ax.set_title(f"{date}")
+            # Ajustar os limites dos eixos
+            axs[i][j].set_xlim(-45, -43.5)
+            axs[i][j].set_ylim(-22.4, -21.2)
+
+            z += 1
+
+    plt.savefig(os.path.join(IMAGES_DIR, "interpolacao.png"))
 
     return fig
 
@@ -232,8 +236,7 @@ def result_figure(result: List[float]) -> Figure:
 
 def figures_to_readme() -> None:
     from data_reader import read_contour_file, multithreading_reader_dat_file
-    from preprocess import apply_contour
-    from predict import predict_precipitation
+    from preprocess import apply_contour, transform_data
 
     contour = (
         read_contour_file(
@@ -244,18 +247,11 @@ def figures_to_readme() -> None:
 
     df = apply_contour(contour, forecast)
 
+    df_transformed = transform_data(df)
+
     contour_figure(data=contour)
     apply_contour_figure(data=df)
-
-    rows = 2
-    cols = 5
-    fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=(18, 5))
-    for i in range(rows):
-        for j in range(cols):
-            ax = axs[i][j]
-            predict_figure(fig, ax)
-
-    fig.savefig(os.path.join(IMAGES_DIR, "modelagem.png"))
+    interpolation_figure(data=df_transformed)
 
 
 if __name__ == "__main__":

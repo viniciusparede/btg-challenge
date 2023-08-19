@@ -17,7 +17,12 @@ grid_precipitacao = griddata(
 ```
 
 ## Resultado
-![Previsão de precipitação Área](/images/interpolação.png)
+Para cada dia previsto realizamos a interpolação dos dados para saber qual a precipitação daquela área, conforme a figura.
+![Previsão de precipitação Área](/images/interpolacao.png)
+
+Após obtermos esses dados interpolados de previsão de precipitação, surge a necessidade de calcular a integral cumulativa que representa a acumulação desses valores. Isso é especialmente útil para entender a quantidade total de precipitação ocorrida na região de interesse durante o período analisado.
+
+Para realizar esse cálculo, utilizaremos a função **cumulative_trapezoid**. Essa função aplica a técnica dos trapézios acumulativos, que consiste em aproximar a área sob a curva da previsão de precipitação por meio de trapézios individuais em intervalos de tempo discretos. A integral cumulativa resultante nos dará uma estimativa da quantidade total de precipitação acumulada ao longo do período.
 
 
 
