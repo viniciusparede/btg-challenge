@@ -1,19 +1,19 @@
 import os
-
 import numpy as np
 from scipy.interpolate import griddata
 from scipy.integrate import cumulative_trapezoid
 
+# Módulos auxiliares
+from utils.data_reader import multithreading_reader_dat_file, read_contour_file
+from utils.preprocess import apply_contour
 
-# Módulos auxiliaries
-from utils.bln_reader import read_contour_file
-from utils.dat_reader import multithreading_reader_data_file
-from utils.preprocess import preprocess_routine
-
+# Variáveis globais
 FILE_DIR = os.path.abspath(__file__)
 BASE_DIR = os.path.dirname(FILE_DIR)
 DATA_DIR = os.path.join(BASE_DIR, "data")
 
+# Dados obetidos através do estudo de contorno contido no arquivo
+# 'resolution_degradation.ipynb'
 POLYGONAL_ORDER = [
     (-44.6, -22.2),
     (-44.6, -21.8),
@@ -33,9 +33,9 @@ def main() -> None:
         ),
     )[0]
 
-    forecast_df = multithreading_reader_data_file(folder_path=DATA_DIR)
+    forecast_df = multithreading_reader_dat_file(folder_path=DATA_DIR)
 
-    df = preprocess_routine(contour_df, forecast_df)
+    df = apply_contour(contour_df, forecast_df)
 
     df = df.loc[
         :, ["lat_aproximacao", "long_aproximacao", "data_value", "data_previsao"]

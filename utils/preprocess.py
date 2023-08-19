@@ -64,7 +64,7 @@ def _format_date(string):
     return formatted_date
 
 
-def preprocess_routine(
+def apply_contour(
     contour_df: pd.DataFrame,
     forecast_df: pd.DataFrame,
     precision: Optional[float] = None,
@@ -85,7 +85,10 @@ def preprocess_routine(
 
     Example:
         contour_path = "PSATCMG_CAMARGOS.bln"
-        forecast_data = pd.DataFrame(...)  # Seus dados de previsão
+        
+        # Seus dados de previsão
+        forecast_data = pd.DataFrame(...)  
+        
         preprocessed_data = preprocess_routine(contour_path, forecast_data)
     """
 

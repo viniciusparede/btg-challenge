@@ -1,8 +1,37 @@
 import os
+import re
 import multiprocessing
 from concurrent.futures import ThreadPoolExecutor
 
 import pandas as pd
+
+
+def read_contour_file(file_path: str) -> pd.DataFrame:
+    """
+    Lê um arquivo de contorno e extrai as coordenadas de latitude e longitude.
+
+    Args:
+        file_path (str): O caminho para o arquivo de contorno.
+
+    Returns:
+        pd.DataFrame: Um DataFrame contendo as coordenadas de latitude e longitude.
+
+    Raises:
+        AssertionError: Se o número de linhas no arquivo não corresponder ao valor especificado no cabeçalho.
+    """
+    line_split_comp = re.compile(r"\s*,")
+
+    with open(file_path, "r") as f:
+        raw_file = f.readlines()
+
+    l_raw_lines = [
+        line_split_comp.split(raw_file_line.strip()) for raw_file_line in raw_file
+    ]
+    l_raw_lines = list(filter(lambda item: bool(item[0]), l_raw_lines))
+    float_raw_lines = [list(map(float, raw_line))[:2] for raw_line in l_raw_lines]
+    header_line = float_raw_lines.pop(0)
+    assert len(float_raw_lines) == int(header_line[0])
+    return pd.DataFrame(float_raw_lines, columns=["lat", "long"])
 
 
 def read_dat_file_to_dataframe(file_path: str) -> pd.DataFrame:
@@ -26,7 +55,7 @@ def read_dat_file_to_dataframe(file_path: str) -> pd.DataFrame:
         return df
 
 
-def multithreading_reader_data_file(folder_path: str) -> pd.DataFrame:
+def multithreading_reader_dat_file(folder_path: str) -> pd.DataFrame:
     """
     Lê vários arquivos de dados do tipo .dat em paralelo utilizando threads e cria um DataFrame combinado.
 
