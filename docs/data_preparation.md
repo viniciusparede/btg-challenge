@@ -18,4 +18,15 @@ O GeoPandas é um projeto de código aberto que visa facilitar o trabalho com da
 
 A função **apply_contour** desempenha um papel crucial ao realizar uma rotina de pré-processamento especializada, na qual ocorre a conversão eficiente de DataFrames convencionais em GeoDataFrames enriquecidos. Essa rotina abrange diversas etapas que vão desde a junção baseada na proximidade geográfica até ajustes essenciais nas colunas dos dados.
 
-Além disso, a etapa de junção por proximidade desempenha um papel fundamental. Ao aplicar essa técnica, a função reúne elementos que estão em estreita proximidade geográfica, possibilitando a criação de conexões significativas entre os dados. Essa junção é especialmente vantajosa em cenários nos quais a relação espacial entre os dados é crucial para a interpretação dos resultados.
+A etapa de junção por proximidade produz nossa condição de contorno ao problema. Ao aplicar essa técnica, a função reúne elementos que estão em estreita proximidade geográfica, possibilitando a criação de conexões significativas entre os dados. Essa junção é especialmente vantajosa em cenários nos quais a relação espacial entre os dados é crucial para a interpretação dos resultados.
+
+```python
+# Realizar a junção usando o método sjoin_nearest com base na coluna rounded_geometry
+result = gpd.sjoin_nearest(
+    left_df=gcontour_df,
+    right_df=gforecast_df,
+    how="left",
+    distance_col="distance",
+    max_distance=sys.maxsize,
+)
+```
