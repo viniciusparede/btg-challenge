@@ -11,8 +11,8 @@ Siga estas etapas para instalar e configurar o projeto em seu ambiente local.
 
 ### Pré-requisitos
 Certifique-se de possuir:
- - Python - Versão X.X.X
- - Git - Versão X.X.X
+ - Python - Versão 3.10.12
+ - Git - Versão 2.34.1
 
 1. Clonar repostiório
 ```
