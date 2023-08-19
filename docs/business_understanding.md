@@ -9,5 +9,3 @@ A informação de quanto choveu ou quanto choverá em determinado lugar é dado 
 Para o desafio foi disponibilizado os arquivos de previsão de precipitação do modelo meterológico ETA, desenvolvido pelo INPE.
 
 O desafio consiste em responder a seguinte pergunta: **Qual é a previsão de precipitação ACUMULADA dada pelo modelo ETA no dia 01/12/2021 para a região de escoamento da usina Hidrelétrica Camargos (Bacia do Rio Grande)?**
-
-
