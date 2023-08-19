@@ -53,7 +53,7 @@ def main() -> None:
     # Figura do resultado - /images/result.png
     result_figure(result)
     result_dir = os.path.join(os.path.join(DATA_DIR, "images"), "result.png")
-    print(f"Resultado na pasta: {result_dir}")
+    print(f"Resultado gráfico: {result_dir}")
 
 
 if __name__ == "__main__":
