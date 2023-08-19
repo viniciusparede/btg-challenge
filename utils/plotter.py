@@ -111,44 +111,39 @@ def apply_contour_figure(data: pd.DataFrame) -> Figure:
 
 
 def predict_figure(
-    grid_x: np.ndarray, grid_y: np.ndarray, precipation_grid: np.ndarray, date: str
-) -> Figure:
-    rows = 2
-    cols = 5
+    fig: Figure,
+    ax: np.ndarray,
+    grid_x: np.ndarray,
+    grid_y: np.ndarray,
+    precipation_grid: np.ndarray,
+    date: str,
+) -> None:
     """Cria figura de predições para todos os dias"""
 
     # Limites de precipitação
     cbar_min = 0
-    cbar_max = 100
+    cbar_max = 70
 
-    fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=(18, 5))
-    for i in range(rows):
-        for j in range(cols):
-            ax = axs[i][j]
+    # Plot dos resultados de predição
+    contour = ax.contourf(grid_x, grid_y, precipation_grid, levels=20, cmap="Blues")
 
-            # Plot dos resultados de predição
-            contour = ax.contourf(
-                grid_x, grid_y, precipation_grid, levels=20, cmap="Blues"
-            )
+    # Adicionar uma colorbar
+    cbar = fig.colorbar(contour, ax=ax, label="Precipitação [mm]")
+    cbar.set_clim(cbar_min, cbar_max)
 
-            # Adicionar uma colorbar
-            cbar = fig.colorbar(contour, ax=ax, label="Precipitação [mm]")
-            cbar.set_clim(cbar_min, cbar_max)
+    # Plotagem do polígono
+    ax.plot(
+        [p[0] for p in POLYGONAL_ORDER],
+        [p[1] for p in POLYGONAL_ORDER],
+        color="red",
+    )
 
-            # Plotagem do polígono
-            ax.plot(
-                [p[0] for p in POLYGONAL_ORDER],
-                [p[1] for p in POLYGONAL_ORDER],
-                color="red",
-            )
+    # Ajustar os limites dos eixos
+    ax.set_ylim(-22.4, -21.2)
 
-            # Ajustar os limites dos eixos
-            ax.set_ylim(-22.4, -21.2)
+    # Data de cada subplot
+    ax.set_title(f"{date}")
 
-            # Data de cada subplot
-            ax.set_title(f"{date}")
-
-    fig.savefig(os.path.join(IMAGES_DIR, "modelagem.png"))
     return fig
 
 
@@ -251,6 +246,16 @@ def figures_to_readme() -> None:
 
     contour_figure(data=contour)
     apply_contour_figure(data=df)
+
+    rows = 2
+    cols = 5
+    fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=(18, 5))
+    for i in range(rows):
+        for j in range(cols):
+            ax = axs[i][j]
+            predict_figure(fig, ax)
+
+    fig.savefig(os.path.join(IMAGES_DIR, "modelagem.png"))
 
 
 if __name__ == "__main__":
