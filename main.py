@@ -36,7 +36,7 @@ def load_data() -> pd.DataFrame:
 
 def main() -> None:
     # Dataframe base
-    df = load_data().pipe(transform_data)
+    df: pd.DataFrame = load_data().pipe(transform_data)
 
     # Datas de predição
     dates = df["data_previsao"].sort_values().unique()
@@ -46,9 +46,9 @@ def main() -> None:
     result = [model.predict(date) for date in dates]
 
     # Calculando o resultado acumulado
-    acumulado = np.cumsum(result)
+    cumulative_result = np.cumsum(result)
 
-    print(f"Precipitação acumulada: {np.round(np.max(acumulado), 2)} mm")
+    print(f"Precipitação acumulada: {np.round(np.max(cumulative_result), 2)} mm")
 
     # Figura do resultado - /images/result.png
     result_figure(result)

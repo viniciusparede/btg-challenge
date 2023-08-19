@@ -41,14 +41,6 @@ def contour_figure(data: pd.DataFrame) -> Figure:
     Retorna:
         Figure: O objeto Figure do matplotlib contendo o gráfico de contorno.
 
-    Exemplo:
-        Suponha que 'data' seja um DataFrame contendo as colunas 'lat' e 'long'
-        que representam as coordenadas de latitude e longitude da Bacia do Rio Grande.
-        Você pode chamar o método da seguinte forma:
-
-        >>> fig = contour_figure(data)
-        >>> fig.show()  # Mostra a figura interativamente
-
     """
     fig, ax = plt.subplots()
 
@@ -75,15 +67,6 @@ def apply_contour_figure(data: pd.DataFrame) -> Figure:
 
     Retorna:
         Figure: O objeto Figure do matplotlib contendo a figura com a estratégia de contorno.
-
-    Exemplo:
-        Suponha que 'data' seja um DataFrame contendo as colunas 'lat_aproximacao',
-        'long_aproximacao', 'lat_referencia' e 'long_referencia' que representam
-        as coordenadas de latitude e longitude dos pontos de aproximação e referência.
-        Você pode chamar o método da seguinte forma:
-
-        >>> fig = apply_contour_figure(data)
-        >>> fig.show()  # Mostra a figura interativamente
 
     """
 
@@ -112,6 +95,15 @@ def apply_contour_figure(data: pd.DataFrame) -> Figure:
 
 
 def interpolation_figure(data: pd.DataFrame) -> Figure:
+    """
+    Cria uma figura de visualização das previsões interpoladas de precipitação.
+
+    Args:
+        data (pd.DataFrame): Um DataFrame contendo os dados de previsão de precipitação.
+
+    Returns:
+        plt.Figure: Uma instância da figura gerada.
+    """
     from model import PrecipitationModel
 
     model = PrecipitationModel(data.copy())
@@ -152,7 +144,15 @@ def interpolation_figure(data: pd.DataFrame) -> Figure:
 
 
 def result_figure(result: List[float]) -> Figure:
-    """Cria a figura do resultado final"""
+    """
+    Cria uma figura que representa o resultado final da previsão de precipitação.
+
+    Args:
+        result (List[float]): Uma lista contendo os valores de precipitação para cada dia.
+
+    Returns:
+        plt.Figure: Uma instância da figura gerada.
+    """
     # Strings para o eixo X
     labels = [
         "02/dez",
@@ -235,6 +235,12 @@ def result_figure(result: List[float]) -> Figure:
 
 
 def figures_to_readme() -> None:
+    """
+    Gera e exibe figuras relevantes para inclusão no arquivo README.
+    Realiza a leitura do arquivo de contorno, leitura dos arquivos de previsão,
+    aplicação do contorno aos dados de previsão, transformação dos dados e geração de figuras de visualização.
+    """
+
     from data_reader import read_contour_file, multithreading_reader_dat_file
     from preprocess import apply_contour, transform_data
 
