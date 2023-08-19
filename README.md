@@ -40,4 +40,4 @@ A documentação foi divida em seções para entendimento do projeto, são elas:
 
 
 ## Resultado
-![Previsão de precipitação - Bacia do Rio Grade](data/result.png)
+![Previsão de precipitação - Bacia do Rio Grade](images/result.png)
