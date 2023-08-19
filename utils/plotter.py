@@ -91,13 +91,13 @@ def apply_contour_figure(data: pd.DataFrame) -> Figure:
     ax.plot(
         data["lat_aproximacao"],
         data["long_aproximacao"],
-        color="#5C88DA",
+        color="#0A1E8C",
         label="Aproximação",
     )
     ax.plot(
         data["lat_referencia"],
         data["long_referencia"],
-        color="#0A1E8C",
+        color="#5C88DA",
         label="Referência",
     )
 
