@@ -1,44 +1,21 @@
-# Compreensão dos dados
-Um dos problemas do desafio consiste na integração dos dados de precipitação e os pontos que determinam a área da Bacia do Rio Grande.
+# Preparação dos dados
+Um dos problemas do desafio consiste na integração dos dados do modelo de precipitação e os pontos que determinam a área da Bacia do Rio Grande. Iremos utilizar a função **apply_contour** como base para essa junção. Percebe-se após abrir os arquivos que os dados do modelo de precipitação disponibilizados contém precipitações em diferentes pontos, mas com uma resolução menor que os atributos contidos no arquivo de contorno da bacia.
 
-## Arquivo de coordenadas geogŕaficas (Bacia do Rio Grande)
-```python
-read_contour_file(file_path: str)
-```
-### Visualização dos dados
-| lat        	| long       	|
-|------------	|------------	|
-| -44.617282 	| -22.288938 	|
-| -44.613593 	| -22.287491 	|
-| -44.608377 	| -22.282603 	|
-
-Os dados obtidos através do arquivo PSATCMG_CAMARGOS.bln representam as coordenadas geográficas da Bacia do Rio Grande. A figura abaixo representa uma visualização mais efetiva da região.
-
-![Contorno Bacia Rio do Grande](/data/bacia_rio_grande.png)
-
-## Arquivos de previsão de precipitação
-O nome dos arquivos seguem o seguinte padrão: ETA40_p**ddmmyy**a**ddmmyy**.dat
-
-A primeira data é referente a quando foi feita a previsão e a segunda data diz respeito qual data está sendo prevista.
-
-Os arquivos disponibilizados estão em formato .dat e a função de leitura dos mesmos foi previamente cedida pela função
+Tomemos como exemplo dois conjuntos de dados de latitude: um expresso com apenas uma casa decimal (por exemplo, 37.7) e outro com quatro casas decimais (por exemplo, 37.7123). A disparidade na resolução desses dados pode resultar em consequências significativas durante análises geoespaciais.
 
 ```python
-read_dat_file_to_dataframe(file_path: str)
+# Exemplo de latitudes com diferentes formatos
+latitude1 = 37.7
+latitude2 = 37.7123
 ```
 
-Percebe-se apenas olhando o nome dos arquivos que todos são referentes a data 01/12/2021 e a última data de previsão disponível é do dia 11/12/2021.
+A integração de dados geoespaciais com resoluções discrepantes pode ser problemática. Na tentativa de combinar conjuntos de dados, a falta de padronização pode levar a resultados imprecisos e dificultar a criação de análises abrangentes. No nosso caso não iremos conseguir combinar conjuntos de dados utilizando como chave primária as coordenadas geográficas.
 
-Para sabermos a previsão de precipitação acumulada dada pelo modelo do dia 01/12/2021 até o dia 11/12/2021 deveremos realizar a leitura de todos os arquivos disponibilizados.
+## Resolução de coordenadas geográficas
+Para estabelecer uma condição de contorno, primeiramente iremos utilizar a biblioteca **geopandas**.
 
-### Visualização dos dados
-| lat   | long | data_value |
-|-------|------|------------|
-| -30.2 | 3.4  | 4.7        |
-| -30.2 | 3.8  | 3.8        |
-| -30.2 | 4.2  | 0.0        |
+O GeoPandas é um projeto de código aberto que visa facilitar o trabalho com dados geoespaciais em Python. O GeoPandas estende os tipos de dados utilizados pelo pandas para permitir operações espaciais em tipos geométricos.
 
-Após abrir o arquivo nota-se três atributos. Os atributos lat e long representam latitude e longitude de um determinado ponto, portanto a coordenada geográfica e, a terceira variável nomeada como data_value demonstra precipitação diária acumulada naquele dia.
+A função **apply_contour** desempenha um papel crucial ao realizar uma rotina de pré-processamento especializada, na qual ocorre a conversão eficiente de DataFrames convencionais em GeoDataFrames enriquecidos. Essa rotina abrange diversas etapas que vão desde a junção baseada na proximidade geográfica até ajustes essenciais nas colunas dos dados.
 
-OBS: A resolução dos pontos de predição são menores comparados ao arquivo de coordenadas geográfica da Bacia do Rio Grande.
-
+Além disso, a etapa de junção por proximidade desempenha um papel fundamental. Ao aplicar essa técnica, a função reúne elementos que estão em estreita proximidade geográfica, possibilitando a criação de conexões significativas entre os dados. Essa junção é especialmente vantajosa em cenários nos quais a relação espacial entre os dados é crucial para a interpretação dos resultados.

@@ -64,7 +64,6 @@ def _format_date(string):
 def apply_contour(
     contour_df: pd.DataFrame,
     forecast_df: pd.DataFrame,
-    precision: Optional[float] = None,
 ) -> pd.DataFrame:
     """
     Realiza uma rotina de pré-processamento que inclui a leitura do arquivo de contorno
