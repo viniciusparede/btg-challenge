@@ -20,8 +20,16 @@ A função **apply_contour** desempenha um papel crucial ao realizar uma rotina 
 
 A etapa de junção por proximidade produz nossa condição de contorno ao problema. Ao aplicar essa técnica, a função reúne elementos que estão em estreita proximidade geográfica, possibilitando a criação de conexões significativas entre os dados. Essa junção é especialmente vantajosa em cenários nos quais a relação espacial entre os dados é crucial para a interpretação dos resultados.
 
+Para transformar um conjunto de dados do tipo Pandas em GeoPandas necessitamos criar uma coluna do tipo 'geometry' para ser nossa chave primária. A figura representa como os dados da latitude e longitude de determinado ponto são repassados.
+
+![Coluna do tipo 'geometry'](/images/geometry.webp)
+
+A partir dessa coluna podemos realizar a operação de 'join' com base na coluna 'geometry'. Essa operação visa a junção espacial de dois GeoDataFrames com base na distância entre suas geometrias.
+
+Os resultados incluirão vários registros de saída para um único registro de entrada onde há vários vizinhos equidistantes mais próximos ou com interseção.
+
 ```python
-# Realizar a junção usando o método sjoin_nearest com base na coluna rounded_geometry
+# Realizar a junção usando o método sjoin_nearest com base na coluna geometry
 result = gpd.sjoin_nearest(
     left_df=gcontour_df,
     right_df=gforecast_df,
@@ -29,4 +37,32 @@ result = gpd.sjoin_nearest(
     distance_col="distance",
     max_distance=sys.maxsize,
 )
+```
+
+Como resultado final:
+| lat_referencia 	| long_referencia 	| lat_aproximacao 	| long_aproximacao 	| data_value 	| distance 	| data_previsao 	|
+|----------------	|-----------------	|-----------------	|------------------	|------------	|----------	|---------------	|
+| -44.569716     	| -22.239244      	| -44.6           	| -22.2            	| 18.0       	| 0.04957  	| 10/12/2021    	|
+| -44.408722     	| -22.202038      	| -44.6           	| -22.2            	| 1.0        	| 0.191289 	| 02/12/2021    	|
+| -44.305087     	| -22.136691      	| -44.2           	| -22.2            	| 29.7       	| 0.122683 	| 08/12/2021    	|
+
+## Análise do contorno criado
+Após aplicar o préprocessamento dos dados o seguinte polígono foi criado
+![Contorno de aproximação](/images/contorno.png)
+
+Nota-se que o polígono de delimitação aproximada, construído por meio da manipulação dos dados, abrange uma extensão adequada para viabilizar a previsão de precipitação. É importante ressaltar que alcançar uma delimitação perfeita é inviável devido às limitações de resolução dos dados. No entanto, para fins práticos, a delimitação atual se alinha de maneira consistente com as características da Bacia do Rio Grande.
+
+No contexto deste desafio, adotaremos os seguintes vértices:
+
+```python
+[
+    (-44.6, -22.2),
+    (-44.6, -21.8),
+    (-44.6, -21.4),
+    (-44.2, -21.4),
+    (-43.8, -21.4),
+    (-43.8, -21.8),
+    (-44.2, -21.8),
+    (-44.2, -22.2),
+]
 ```
