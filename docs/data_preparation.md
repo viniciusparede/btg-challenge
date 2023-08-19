@@ -6,6 +6,15 @@ Um dos problemas do desafio consiste na integração dos dados de precipitação
 read_contour_file(file_path: str)
 ```
 ### Visualização dos dados
+| lat        	| long       	|
+|------------	|------------	|
+| -44.617282 	| -22.288938 	|
+| -44.613593 	| -22.287491 	|
+| -44.608377 	| -22.282603 	|
+
+Os dados obtidos através do arquivo PSATCMG_CAMARGOS.bln representam as coordenadas geográficas da Bacia do Rio Grande. A figura abaixo representa uma visualização mais efetiva da região.
+
+![Contorno Bacia Rio do Grande](/data/bacia_rio_grande.png)
 
 ## Arquivos de previsão de precipitação
 O nome dos arquivos seguem o seguinte padrão: ETA40_p**ddmmyy**a**ddmmyy**.dat
