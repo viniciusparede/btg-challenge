@@ -10,7 +10,7 @@ Responsável pelo desenvolvimento, manutenção e evolução de projetos de alto
 Siga estas etapas para instalar e configurar o projeto em seu ambiente local.
 
 ### Pré-requisitos
-Certifique-se de possuir:
+O código foi testado com as seguintes versões de Pyhon e Git
  - Python - Versão 3.10.12
  - Git - Versão 2.34.1
 
