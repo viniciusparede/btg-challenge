@@ -1,16 +1,13 @@
 import os
 import sys
+from datetime import datetime
+from typing import List, Optional
 
 import pandas as pd
-import numpy as np
 import geopandas as gpd
 from shapely.geometry import Point
 
-from datetime import datetime
-
-from typing import List, Optional
-
-
+# Varíaveis globais
 FILE_DIR: str = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR: str = os.path.dirname(FILE_DIR)
 DATA_DIR: str = os.path.join(BASE_DIR, "data")
@@ -85,10 +82,10 @@ def apply_contour(
 
     Example:
         contour_path = "PSATCMG_CAMARGOS.bln"
-        
+
         # Seus dados de previsão
-        forecast_data = pd.DataFrame(...)  
-        
+        forecast_data = pd.DataFrame(...)
+
         preprocessed_data = preprocess_routine(contour_path, forecast_data)
     """
 
@@ -101,23 +98,13 @@ def apply_contour(
     )
 
     # Realizar a junção usando o método sjoin_nearest com base na coluna rounded_geometry
-    if not precision is None:
-        result = gpd.sjoin_nearest(
-            left_df=gcontour_df,
-            right_df=gforecast_df,
-            how="left",
-            distance_col="distance",
-            max_distance=precision,
-        )
-
-    else:
-        result = gpd.sjoin_nearest(
-            left_df=gcontour_df,
-            right_df=gforecast_df,
-            how="left",
-            distance_col="distance",
-            max_distance=sys.maxsize,
-        )
+    result = gpd.sjoin_nearest(
+        left_df=gcontour_df,
+        right_df=gforecast_df,
+        how="left",
+        distance_col="distance",
+        max_distance=sys.maxsize,
+    )
 
     # renomear colunas
     result.rename(
