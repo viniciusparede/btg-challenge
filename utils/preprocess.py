@@ -105,7 +105,7 @@ def apply_contour(
         max_distance=sys.maxsize,
     )
 
-    # renomear colunas
+    # Renomear colunas
     result.rename(
         columns={
             "lat_left": "lat_referencia",
