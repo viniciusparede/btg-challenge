@@ -15,7 +15,7 @@ read_contour_file(file_path: str)
 
 Os dados obtidos através do arquivo PSATCMG_CAMARGOS.bln representam as coordenadas geográficas da Bacia do Rio Grande. A figura abaixo demonstra uma visualização mais efetiva da região.
 
-![Contorno Bacia Rio do Grande](/data/bacia_rio_grande.png)
+![Contorno Bacia Rio do Grande](/images/bacia_rio_grande.png)
 
 ## Arquivos de previsão de precipitação
 O nome dos arquivos seguem o seguinte padrão: ETA40_p**ddmmyy**a**ddmmyy**.dat

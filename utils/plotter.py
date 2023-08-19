@@ -27,7 +27,28 @@ POLYGONAL_ORDER = [
 ]
 
 
-def contour_figure(self, data: pd.DataFrame, file_name: str) -> Figure:
+def contour_figure(data: pd.DataFrame) -> Figure:
+    """
+    Cria um gráfico de contorno para a Bacia do Rio Grande.
+
+    Este método gera um gráfico de contorno que exibe a Bacia do Rio Grande
+    usando as coordenadas de latitude e longitude fornecidas nos dados.
+
+    Parâmetros:
+        data (pd.DataFrame): DataFrame contendo as coordenadas de latitude e longitude.
+
+    Retorna:
+        Figure: O objeto Figure do matplotlib contendo o gráfico de contorno.
+
+    Exemplo:
+        Suponha que 'data' seja um DataFrame contendo as colunas 'lat' e 'long'
+        que representam as coordenadas de latitude e longitude da Bacia do Rio Grande.
+        Você pode chamar o método da seguinte forma:
+
+        >>> fig = contour_figure(data)
+        >>> fig.show()  # Mostra a figura interativamente
+
+    """
     fig, ax = plt.subplots()
 
     ax.plot(data["lat"], data["long"], color="#0A1E8C")
@@ -35,23 +56,48 @@ def contour_figure(self, data: pd.DataFrame, file_name: str) -> Figure:
     ax.set_xlabel("Latitude")
     ax.set_ylabel("Longitude")
 
-    fig.savefig(os.path.join(IMAGES_DIR, f"{file_name}.png"))
+    fig.savefig(os.path.join(IMAGES_DIR, "bacia_rio_grande.png"))
     return fig
 
 
 def apply_contour_figure(data: pd.DataFrame) -> Figure:
+    """
+    Cria uma figura que ilustra a estratégia de contorno aplicada aos dados.
+
+    Este método gera uma figura que apresenta os resultados da estratégia de contorno
+    aplicada aos dados de aproximação e de referência. As trajetórias de contorno
+    são plotadas usando as coordenadas de latitude e longitude dos pontos.
+
+    Parâmetros:
+        data (pd.DataFrame): DataFrame contendo as coordenadas de latitude e longitude
+                             dos pontos de aproximação e referência.
+
+    Retorna:
+        Figure: O objeto Figure do matplotlib contendo a figura com a estratégia de contorno.
+
+    Exemplo:
+        Suponha que 'data' seja um DataFrame contendo as colunas 'lat_aproximacao',
+        'long_aproximacao', 'lat_referencia' e 'long_referencia' que representam
+        as coordenadas de latitude e longitude dos pontos de aproximação e referência.
+        Você pode chamar o método da seguinte forma:
+
+        >>> fig = apply_contour_figure(data)
+        >>> fig.show()  # Mostra a figura interativamente
+
+    """
+
     fig, ax = plt.subplots()
 
     ax.plot(
         data["lat_aproximacao"],
         data["long_aproximacao"],
-        color="#0A1E8C",
+        color="#5C88DA",
         label="Aproximação",
     )
     ax.plot(
         data["lat_referencia"],
         data["long_referencia"],
-        color="#5C88DA",
+        color="#0A1E8C",
         label="Referência",
     )
 
@@ -69,6 +115,7 @@ def predict_figure(
 ) -> Figure:
     rows = 2
     cols = 5
+    """Cria figura de predições para todos os dias"""
 
     # Limites de precipitação
     cbar_min = 0
@@ -106,6 +153,7 @@ def predict_figure(
 
 
 def result_figure(result: List[float]) -> Figure:
+    """Cria a figura do resultado final"""
     # Strings para o eixo X
     labels = [
         "02/dez",
@@ -188,9 +236,21 @@ def result_figure(result: List[float]) -> Figure:
 
 
 def figures_to_readme() -> None:
-    from utils.data_reader import read_contour_file, multithreading_reader_dat_file
-    from utils.preprocess import apply_contour
-    from utils.predict import predict_precipitation
+    from data_reader import read_contour_file, multithreading_reader_dat_file
+    from preprocess import apply_contour
+    from predict import predict_precipitation
+
+    contour = (
+        read_contour_file(
+            file_path="/home/viniciusparede/repositories/personal/btg-challenge/data/PSATCMG_CAMARGOS.bln"
+        ),
+    )[0]
+    forecast = multithreading_reader_dat_file(folder_path=DATA_DIR)
+
+    df = apply_contour(contour, forecast)
+
+    contour_figure(data=contour)
+    apply_contour_figure(data=df)
 
 
 if __name__ == "__main__":
