@@ -20,9 +20,7 @@ def load_data() -> pd.DataFrame:
 
     # DataFrame com os dados
     contour = (
-        read_contour_file(
-            file_path="/home/viniciusparede/repositories/personal/btg-challenge/data/PSATCMG_CAMARGOS.bln"
-        ),
+        read_contour_file(file_path=os.path.join(DATA_DIR, "PSATCMG_CAMARGOS.bln")),
     )[0]
 
     # DataFrame com as previsões de precitações
