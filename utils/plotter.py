@@ -245,9 +245,7 @@ def figures_to_readme() -> None:
     from preprocess import apply_contour, transform_data
 
     contour = (
-        read_contour_file(
-            file_path="/home/viniciusparede/repositories/personal/btg-challenge/data/PSATCMG_CAMARGOS.bln"
-        ),
+        read_contour_file(file_path=os.path.join(DATA_DIR, "PSATCMG_CAMARGOS.bln")),
     )[0]
     forecast = multithreading_reader_dat_file(folder_path=DATA_DIR)
 
